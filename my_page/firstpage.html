@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>My First Page</title>
+
+		<script src="js/manu.js"></script>
+		<script src="js/img.js" type="text/javascript"></script>
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/jaudio.min.js"></script>
+		<script src="js/jaudio.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="resources/css/main.min.css">
+		<style type="text/css">
+			.menu {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.menu .menu-item {
+				position: relative;
+				cursor: pointer;
+			}
+			
+			.menu .menu-item .wee {
+				height: 2px;
+				width: 100%;
+				background-color: #002b75;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				transition: 0.75s;
+			}
+			
+			.menu .menu-item h6 {
+				margin: 0;
+				padding: 0 1rem 1.5rem;
+				font-size: 1rem;
+				color: #232323;
+				transition: 0.75s;
+			}
+			
+			.menu .menu-item:hover h6 {
+				color: #002b75;
+			}
+			
+			.menu .current-menu-item h6 {
+				color: #002b75;
+			}
+			
+			.item_content ul {
+				list-style: none;
+			}
+			
+			.item_content ul li {
+				width: 400px;
+				height: 240px;
+				float: left;
+				margin: 10px
+			}
+			
+			.item_content {
+				width: 100%;
+				height: 100%;
+				margin: 0 auto;
+			}
+			
+			.item_content .item {
+				width: 400px;
+				height: 240px;
+				line-height: 120px;
+				text-align: center;
+				cursor: pointer;
+				background: #ccc;
+			}
+			
+			.item_content .item img {
+				width: 400px;
+				height: 240px;
+				border-radius: 6px;
+			}
+			
+			.jAudio--player {
+				display: table;
+				overflow: hidden;
+				background: #fff;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+				margin: 100px auto;
+				width: 352px;
+			}
+			
+			.jAudio--player:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--ui {
+				position: relative;
+				width: 100%;
+			}
+			
+			.jAudio--player .jAudio--status-bar {
+				width: 100%;
+				z-index: 1;
+				position: relative;
+				padding: 100px 2rem 2rem 2rem;
+				display: table;
+			}
+			
+			.jAudio--player .jAudio--status-bar:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--controls {
+				width: 100%;
+				display: table;
+				background: #fafafa;
+			}
+			
+			.jAudio--player .jAudio--controls:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--controls ul {
+				display: table;
+				overflow: hidden;
+				width: 100%;
+			}
+			
+			.jAudio--player .jAudio--controls ul:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--controls li {
+				position: relative;
+				width: 33.3333%;
+				height: 5rem;
+				line-height: 5rem;
+			}
+			
+			.jAudio--player .jAudio--thumb {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				background-size: cover;
+				background-position: center center;
+			}
+			
+			.jAudio--player .jAudio--time {
+				display: table;
+				width: 100%;
+			}
+			
+			.jAudio--player .jAudio--time:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--time * {
+				width: 50%;
+				display: block;
+				float: left;
+				color: #fff;
+				text-shadow: 0 1px 1px #000;
+				font-size: 0.9rem;
+			}
+			
+			.jAudio--player .jAudio--time .jAudio--time-elapsed {
+				text-align: left;
+			}
+			
+			.jAudio--player .jAudio--time .jAudio--time-total {
+				text-align: right;
+			}
+			
+			.jAudio--player .jAudio--details * {
+				color: #fff;
+				text-shadow: 0 1px 1px #000;
+				font-size: 1.2rem;
+			}
+			
+			.jAudio--player .jAudio--details *:first-of-type {
+				font-weight: bold;
+			}
+			
+			.jAudio--player .jAudio--details p {
+				width: 100%;
+			}
+			
+			.jAudio--player .jAudio--details p span {
+				display: block;
+			}
+			
+			.jAudio--player .jAudio--progress-bar {
+				margin: 1.33333rem 0;
+			}
+			
+			.jAudio--player .jAudio--progress-bar .jAudio--progress-bar-wrapper {
+				width: 100%;
+				position: relative;
+				background: rgba(255, 255, 255, 0.3);
+				cursor: pointer;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			
+			.jAudio--player .jAudio--progress-bar .jAudio--progress-bar-played {
+				height: 10px;
+				background: #FF6666;
+				position: relative;
+				border-radius: 10px;
+			}
+			
+			.jAudio--player .jAudio--progress-bar .jAudio--progress-bar-pointer {
+				height: 10px;
+				width: 10px;
+				border-radius: 50%;
+				position: absolute;
+				right: 0;
+				background: #fff;
+			}
+			
+			.jAudio--player .jAudio--playlist {
+				background: #fff;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item {
+				display: block;
+				width: 100%;
+				padding: 1.33333rem 2rem;
+				display: table;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item.active {
+				background: #f55c5c;
+				border-bottom-color: #f55c5c;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item.active * {
+				color: #fff;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item:not(.active):hover {
+				background: #fafafa;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item:last-of-type {
+				border: 0;
+				margin-bottom: 0;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-thumb {
+				float: left;
+				margin-right: 0.66667rem;
+				display: table;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-thumb:after {
+				content: " ";
+				display: block;
+				width: 100%;
+				clear: both;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-thumb img {
+				height: 2.4rem;
+				width: 2.4rem;
+				border-radius: 50%;
+				float: left;
+				margin-right: 0.5rem;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-meta-text h4 {
+				font-size: 1rem;
+				color: #000;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-meta-text p {
+				font-size: 0.8rem;
+			}
+			
+			.btn {
+				position: relative;
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: transparent;
+				border: 0;
+			}
+			
+			.btn span {
+				position: absolute;
+				display: table;
+				height: 15px;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+				overflow: hidden;
+			}
+			
+			.btn span:before,
+			.btn span:after {
+				display: block;
+				content: " ";
+				height: 0;
+				float: left;
+				border-color: transparent;
+				border-style: solid;
+			}
+			
+			.btn:active {
+				background: #f5f5f5;
+			}
+			
+			#btn-prev span:before,
+			#btn-prev span:after,
+			#btn-next span:before,
+			#btn-next span:after,
+			#btn-play span:before,
+			#btn-play span:after {
+				border-top: 7.5px solid transparent;
+				border-bottom: 7.5px solid transparent;
+			}
+			
+			#btn-prev span:before,
+			#btn-prev span:after {
+				border-right: 15px solid #ddd;
+				border-left: 0;
+			}
+			
+			#btn-prev:active span:before,
+			#btn-prev:active span:after {
+				border-right-color: #FF6666 !important;
+			}
+			
+			#btn-next span:before,
+			#btn-next span:after {
+				border-left: 15px solid #ddd;
+				border-right: 0;
+			}
+			
+			#btn-next:active span:before,
+			#btn-next:active span:after {
+				border-left-color: #FF6666 !important;
+			}
+			
+			#btn-play span:before {
+				border-left: 15px solid #ddd;
+				border-right: 0;
+			}
+			
+			#btn-play span:after {
+				display: none;
+			}
+			
+			#btn-play:active span:before,
+			#btn-play.active span:before {
+				border-left-color: #FF6666 !important;
+			}
+			
+			#btn-pause span:before,
+			#btn-pause span:after {
+				width: 5px;
+				height: 15px;
+				background: #FF6666;
+				border: 0;
+			}
+			
+			#btn-pause span:before {
+				margin-right: 5px;
+			}
+			
+			#btn-pause span:active:before,
+			#btn-pause span:active:after,
+			#btn-pause span.active:before,
+			#btn-pause span.active:after {
+				background: #fff;
+				margin-right: 5px;
+			}
+			
+			.jAudio--player .jAudio--controls li button span:before,
+			.jAudio--player .jAudio--controls li button span:after {
+				-webkit-transition: border-color 0.3s ease 0s;
+				transition: border-color 0.3s ease 0s;
+			}
+			
+			.jAudio--player .jAudio--thumb {
+				-webkit-transition: all 0.5s ease 0s;
+				transition: all 0.5s ease 0s;
+			}
+			
+			.jAudio--player .jAudio--progress-bar .jAudio--progress-bar-played {
+				-webkit-transition: all 0.2s ease 0s;
+				transition: all 0.2s ease 0s;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item {
+				-webkit-transition: all 0.5s ease 0s;
+				transition: all 0.5s ease 0s;
+			}
+			
+			.jAudio--player .jAudio--playlist .jAudio--playlist-item * {
+				-webkit-transition: all 0.3s ease 0s;
+				transition: all 0.3s ease 0s;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="menu">
+			<div class="menu-item current-menu-item">
+				<h6>预约</h6>
+				<div class="wee"></div>
+			</div>
+			<div class="menu-item">
+				<h6>投稿</h6>
+			</div>
+			<div class="menu-item">
+				<h6>娱乐</h6>
+			</div>
+			<div class="menu-item">
+				<h6>音乐文章</h6>
+			</div>
+			<div class="menu-item">
+				<h6>登陆</h6>
+			</div>
+		</div>
+		<hr>
+		<div style='width:49%;float:left;height:900px;background-image: url(img/2.jpg) ;background-repeat:no-repeat;background-size:100% 100%; '>
+			<div style="margin-top: 350px;margin-left: 100px; width: 400px;">
+				<h1 style="color: white">杭电心理e站</h1>
+				<li style="color: white"><strong>压力</strong>形成的<strong>焦虑</strong>一直是当代大学生的健康威胁之一</li>
+				<li style="color: white">近年来，由于社会经济的快速发展以及高等教育招生规模的不断扩大，社会竞争日益激烈，毕业生的学习、就业、经济和情感等各方面的压力不断增大，大学生的心理健康已经成为需要特别关注和重视的问题。</li>
+				<p style="color: white">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+				<div>
+					<input type="button" name="" id="" value="了解详情" style="text-align:center;border:2px solid white;padding:10px 40px; margin-top:100px;width:340px;border-radius:25px;color: white" />
+				</div>
+			</div>
+		</div>
+		<div style='width:0px;border:1px solid grey;float:left;height:900px; margin-top: 0px'></div>
+		<div style='width:50%;float:left;height:900px;background-image: url(img/3.jpg);background-repeat:no-repeat;background-size:100% 100%; '>
+			<div style="margin-top: 250px;margin-left: 40px; width: 550px;">
+				<h1>使用场景与受众群体</h1>
+				<h3>“心理e站”旨在提供一个为杭电师生<strong>释</strong><del>搅</del><strong>压</strong><del>基♂</del>的平台，同学们可以在网站里预约心理咨询，写日记，匿名投稿，玩释压网页小游戏，也可以在网站里听由老师整理的轻音乐，文章。而杭电的心理老师则可以发布讲座通知，科普文章，实时掌握同学存在的心理问题而有针对性地进行准备。</h3>
+				<p>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+			</div>
+
+		</div>
+
+		<div style="width: 100%; background: powderblue;float: left;height: 1000px">
+			<div style="width: 70%;margin-left: 40px;background: white;margin-top: 100px;border-radius: 20px ;height: 700px;float: left;">
+				<textarea name="" rows="" cols="" style="width: 100%;height: 100%;"><h3><p> &nbsp谢邀。<del>滑稽</del></p><p>现在的我不过是一个小小的程序员，但对于这个问题还是略懂一二，毕竟以前曾经经历过。</p><p>我三姑的姥爷的表兄弟在二战结束后跟着一帮弟兄移民到了美国，很小的时候我跟着父母去过国外一次，之后就再没出过国。</p><p>正是在那一次，他给我讲述了当年的那段历史。</p><p>当年的美国乱不乱？很乱，经常会发生枪击事件，举个例子吧：</p><p>一个很牛逼很牛逼的大佬，家境殷实，从小就和我三姑的姥爷的表兄弟一起玩到大，可以说是过命的交情。当年在二战时他是这帮弟兄的班长，移民也是他带头的。来到美国后，这些华侨人生地不熟，除了这位大佬别人都不懂英语，怎么办呢？</p><p>这位大佬，就称呼他为刘哥吧，某天夜里，刘哥一个人在餐馆吃饭的时候，恰巧碰到两个黑帮交火，他赶紧藏到了桌子底下，但还是被流弹打死了。</p><p>当时他那帮弟兄就不干了，拍案而起，他们联手堵着餐馆，不让任何人出去，说是要赔偿。要知道当年美国的黑帮有多嚣张？但咱们华人从骨子里就有一种狠劲，死都不怕了，他们又能拿咱们怎么样呢？</p><p>最后我三姑的姥爷的表兄弟他带着几个懂英语的兄弟，和这两个黑帮的大哥进行了多次谈判，要到了一批枪做赔偿。</p><p>他们就是靠着这批枪，一点一点地在美国发展自己的势力，直到今天。</p><p>老人家现在已经七十多岁了，但他的身子骨还硬朗得很，每次我到美国去看他，他都要给我讲当年的那段辛酸往事，让人唏嘘不已。</p><p>综上所述，当年的美国不止是乱，甚至达到了那种没枪就很难活下去的程度。当然，这是对于那些华侨而言的，因为美国人是很排外的。</p><p>以上是对“二战后的美国到底乱不乱”这一问题的解答。</p></h3></textarea>
+			</div>
+			<div style="float: left;width: 27%;background: powderblue;height: 900px;">
+				<h2 style="color:grey;margin-top: 70%;margin-left: 25px">写下你的心情......</h2>
+				<div style="text-align:center;padding:5px 30px; width:150px;border-radius:25px;color: white;margin-top: 40px;background: lightgrey;margin-left: 35px;float: left;">
+					<p style="color: black">匿名投稿</p>
+				</div>
+				<h3 style="color: grey;margin-left: 70px;float: left;margin-top: 60px">发表日记</h3>
+
+			</div>
+
+			<div style="float: left;width: 100%;background: red;height: 1000px;">
+				<div style="width: 50%;background: yellow;height: 800px;float: left;">
+					<div class='jAudio--player'>
+						<audio></audio>
+						<div class='jAudio--ui'>
+							<div class='jAudio--thumb'></div>
+							<div class='jAudio--status-bar'>
+								<div class='jAudio--details'></div>
+								<div class='jAudio--volume-bar'></div>
+								<div class='jAudio--progress-bar'>
+									<div class='jAudio--progress-bar-wrapper'>
+										<div class='jAudio--progress-bar-played'>
+											<span class='jAudio--progress-bar-pointer'></span>
+										</div>
+									</div>
+								</div>
+								<div class='jAudio--time'>
+									<span class='jAudio--time-elapsed'>00:00</span>
+									<span class='jAudio--time-total'>00:00</span>
+								</div>
+							</div>
+						</div>
+
+						<div class='jAudio--playlist'>
+						</div>
+
+						<div class='jAudio--controls'>
+							<ul>
+								<li><button class='btn' data-action='prev' id='btn-prev'><span></span></button></li>
+								<li><button class='btn' data-action='play' id='btn-play'><span></span></button></li>
+								<li><button class='btn' data-action='next' id='btn-next'><span></span></button></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div style="width: 50%;background: pink;height: 1000px;float: left;">
+					<div style="width: 100%;background: blue;height: 20%;float: left;">
+						<div style="float: left;margin-top: 130px;margin-left: 50px;"><h1 >最新文章</h1></div>
+					</div>
+					<div style="width: 100%;background: green;height: 20%;float: left;">
+						 <div style="float: left;width: 20% ;"><img src="img/360.png" alt="" style="height: 130px;"/></div>
+						 <div></div>
+					</div>
+					<div style="width: 100%;background: grey;height: 20%;float: left;"></div>
+					<div style="width: 100%;background: pink;height: 20%;float: left;"></div>
+					<div style="width: 100%;background: powderblue;height: 20%;float: left;"></div>
+				</div>
+
+			</div>
+
+			<div style="float: left;width: 100%;background: white;height: 1100px;margin-top:30px ;margin-left: 20px;">
+				<div class="item_container">
+					<div class="item_content">
+						<ul>
+							<li>
+								<div class="item">
+									<img src="img/youku.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/jd.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/taobao.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/fenghuan.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/souhu.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/wangyi.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/renren.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/360.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/360game.png" />
+								</div>
+							</li>
+							<li>
+								<div class="item">
+									<img src="img/youku.png" />
+								</div>
+							</li>
+
+							<li>
+								<div class="item">
+									<img src="img/jd.png" />
+								</div>
+							</li>
+							<li>
+								<div class="item">
+									<img src="img/wangyi.png" />
+								</div>
+							</li>
+
+						</ul>
+					</div>
+				</div>
+
+				</form>
+			</div>
+
+			<script>
+				$(document).ready(function() {
+					$(window).on('load resize', function() {
+						var $thisnav = $('.current-menu-item').offset().left;
+						$('.menu-item').hover(function() {
+							var $left = $(this).offset().left - $thisnav;
+							var $width = $(this).outerWidth();
+							var $start = 0;
+							$('.wee').css({
+								'left': $left,
+								'width': $width
+							});
+						}, function() {
+							var $initwidth = $('.current-menu-item').width();
+							$('.wee').css({
+								'left': '0',
+								'width': $initwidth
+							});
+						});
+					});
+				});
+
+				$(function() {
+					function Pointer(x, y) {
+						this.x = x;
+						this.y = y;
+					}
+
+					function Position(left, top) {
+						this.left = left;
+						this.top = top;
+					}
+					$(".item_content .item").each(function(i) {
+						this.init = function() { // 初始化
+								this.box = $(this).parent();
+								$(this).attr("index", i).css({
+									position: "absolute",
+									left: this.box.offset().left,
+									top: this.box.offset().top
+								}).appendTo(".item_content");
+								this.drag();
+							},
+							this.move = function(callback) { // 移动
+								$(this).stop(true).animate({
+									left: this.box.offset().left,
+									top: this.box.offset().top
+								}, 500, function() {
+									if(callback) {
+										callback.call(this);
+									}
+								});
+							},
+							this.collisionCheck = function() {
+								var currentItem = this;
+								var direction = null;
+								$(this).siblings(".item").each(function() {
+									if(
+										currentItem.pointer.x > this.box.offset().left &&
+										currentItem.pointer.y > this.box.offset().top &&
+										(currentItem.pointer.x < this.box.offset().left + this.box.width()) &&
+										(currentItem.pointer.y < this.box.offset().top + this.box.height())
+									) {
+										// 返回对象和方向
+										if(currentItem.box.offset().top < this.box.offset().top) {
+											direction = "down";
+										} else if(currentItem.box.offset().top > this.box.offset().top) {
+											direction = "up";
+										} else {
+											direction = "normal";
+										}
+										this.swap(currentItem, direction);
+									}
+								});
+							},
+							this.swap = function(currentItem, direction) { // 交换位置
+								if(this.moveing) return false;
+								var directions = {
+									normal: function() {
+										var saveBox = this.box;
+										this.box = currentItem.box;
+										currentItem.box = saveBox;
+										this.move();
+										$(this).attr("index", this.box.index());
+										$(currentItem).attr("index", currentItem.box.index());
+									},
+									down: function() {
+										// 移到上方
+										var box = this.box;
+										var node = this;
+										var startIndex = currentItem.box.index();
+										var endIndex = node.box.index();;
+										for(var i = endIndex; i > startIndex; i--) {
+											var prevNode = $(".item_content .item[index=" + (i - 1) + "]")[0];
+											node.box = prevNode.box;
+											$(node).attr("index", node.box.index());
+											node.move();
+											node = prevNode;
+										}
+										currentItem.box = box;
+										$(currentItem).attr("index", box.index());
+									},
+									up: function() {
+										// 移到上方
+										var box = this.box;
+										var node = this;
+										var startIndex = node.box.index();
+										var endIndex = currentItem.box.index();;
+										for(var i = startIndex; i < endIndex; i++) {
+											var nextNode = $(".item_content .item[index=" + (i + 1) + "]")[0];
+											node.box = nextNode.box;
+											$(node).attr("index", node.box.index());
+											node.move();
+											node = nextNode;
+										}
+										currentItem.box = box;
+										$(currentItem).attr("index", box.index());
+									}
+								}
+								directions[direction].call(this);
+							},
+							this.drag = function() { // 拖拽
+								var oldPosition = new Position();
+								var oldPointer = new Pointer();
+								var isDrag = false;
+								var currentItem = null;
+								$(this).mousedown(function(e) {
+									e.preventDefault();
+									oldPosition.left = $(this).position().left;
+									oldPosition.top = $(this).position().top;
+									oldPointer.x = e.clientX;
+									oldPointer.y = e.clientY;
+									isDrag = true;
+
+									currentItem = this;
+
+								});
+								$(document).mousemove(function(e) {
+									var currentPointer = new Pointer(e.clientX, e.clientY);
+									if(!isDrag) return false;
+									$(currentItem).css({
+										"opacity": "0.8",
+										"z-index": 999
+									});
+									var left = currentPointer.x - oldPointer.x + oldPosition.left;
+									var top = currentPointer.y - oldPointer.y + oldPosition.top;
+									$(currentItem).css({
+										left: left,
+										top: top
+									});
+									currentItem.pointer = currentPointer;
+									// 开始交换位置
+
+									currentItem.collisionCheck();
+
+								});
+								$(document).mouseup(function() {
+									if(!isDrag) return false;
+									isDrag = false;
+									currentItem.move(function() {
+										$(this).css({
+											"opacity": "1",
+											"z-index": 0
+										});
+									});
+								});
+							}
+						this.init();
+					});
+				});
+			</script>
+			<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
+			<script>
+				window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')
+			</script>
+
+			<script src="js/jquery-2.1.1.min.js"></script>
+			<script src='resources/js/jaudio.min.js'></script>
+			<p style="font-size: 20px;text-indent: 10em;width: 100%;
+			height: 100px;
+			background: #eeeeee;
+			float: right;
+			margin-top:127px;"><br />&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspLink: <br /> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Copyrignt© ZHOUZIWEI</p>
+	</body>
+
+</html>
